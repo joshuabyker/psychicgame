@@ -8,74 +8,82 @@
 
 <body>
     <h1><strong>The Psychic Game</strong></h1>
-    <div class="letter">Guess the letter I am thinking</div>
-    <div class="wins">Wins::</div>
-    <div class="Losses">Losses::</div>
-    <div class="GuessesLeft">Guesses Left</div>
-    <div class="guesses">Letters Guessed</div>
+    <div id="letter">Guess the letter I am thinking</div>
+    <div id="wins">Wins::</div>
+    <div id="Losses">Losses::</div>
+    <div id="GuessesLeft">Guesses Left</div>
+    <div id="guesses">Letters Guessed</div>
     <div>
         
 
 
         <script type="text/javascript">
-            var userGuess;
-            var currentAnswer;
-            var computerGuess;
-            var isDuplicate;
+            let userGuess;
+            let currentAnswer;
+            let computerGuess;
+            let isDuplicate;
 
-            var computerChoices = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",];
+            let CpuChoices = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",];
 
-            var wins = 0;
-            var losses = 0;
-            var guesses;
-            var GuessesLeft = 9;
-            var guessChoices = [];
-            var psychicLetter;
-            var insert = document.getElementById("UserChoice-text");
+            let wins = 0;
+            let losses = 0;
+            let GuessesLeft=9;
+            let CpuGuess;
 
-            var newLetter = function () {
-                psychicLetter = computerChoices[Math.floor(Math.random() * computerChoices.length)];
+            function NewGuess(){
+                CpuGuess = CpuChoices[Math.floor(Math.random()*CpuChoices.length)];
+                console.log(CpuGuess);
             }
-            var soFar = function () {
-                document.getElementById("guesses").innerHTML = "Guesses so far: " + guessesSoFar.join(",");
-            };
-            var guessesLeft = function () {
-                document.getElementById("GuessesLeft").innerHTML = "Guesses Left: " + left;
-            };
+        
 
-            var newGame = function () {
-                guessedLetters = [];
-                left = 9;
-                newLetter();
-                GuessesLeft();
-                soFar();
+            let soFar = [];
+           
+            let updateGuessesLeft = function () {
+                document.getElementById("GuessesLeft").innerHTML = "Guesses Left: " + GuessesLeft;
+            };
+            let updateletter = function (){
+                document.getElementById("guesses").innerHTML = "Letters Guessed:"+ soFar;
             }
+            let newGame = function () {
+                GuessesLeft = 9;
+                soFar = [];
+                updateletter();
+                updateGuessesLeft();
+                NewGuess();
+            }
+            newGame()
             document.onkeyup = function (event) {
-                var userGuess = event.key;
-                left--;
-                guessesSoFar.push(userGuess);
-                GuessesLeft();
-                if (left > 0) {
-                    if (userGuess == psychicLetter) {
-                        wins++;
-                        document.getElementById("wins").innerHTML = "Wins:" + wins;
-                        newGame();
-                        if (left > 0) {
-                            if (userGuess == psychicLetter) {
-                                wins++;
-                                document.getElementById("wins").innerHTML = "Wins:" + wins;
-                                newGame();
-                            }
-                        } else if (left == 0) {
-                            losses++;
-                            document.getElementById("losses").innerHTML = "Losses:" + losses;
-                            newGame();}
-
-                        };
-
-                         insert.innerText = userGuess;
-                        computerGuess = computerChoices;
+                let userGuess = String.fromCharCode(event.keyCode).toLocaleLowerCase();
+                var Correct = CpuGuess===userGuess;
+                if(Correct===false){
+                    GuessesLeft--;
+                    soFar.push(userGuess);
+                    updateletter();
+                    updateGuessesLeft();
+                }
+                if(Correct===true){
+                    wins++;
+                    document.getElementById("wins").innerHTML="Wins: " + wins;
+                    alert("You are scary good!")
+                    newGame();
+                }
                 
+                if(GuessesLeft>0){
+                    // if(userGuess ===CpuGuess){
+                    //     wins++;
+                    //     document.getElementById("wins").innerHTML="Wins: " + wins;
+                    //     alert("You are scary good!")
+                    //     newGame();
+                    // }
+                }else if(GuessesLeft===0){
+                    losses++;
+                    document.getElementById("Losses").innerHTML="Losses: " + losses;
+                    alert("You suck, ya hack!")
+                    newGame();
+
+                }
+            }
+                         
                 
 
         </script>
